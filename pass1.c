@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-int SearchSymbol(char* symb,FILE* f)
+int SearchSymbol(char* symb,FILE *f)
 {
+   rewind(f);
    int found=0;
    char line[100];
    char label[50];
@@ -74,7 +75,7 @@ void main()
    FILE* f1,*f2,*f3,*f4;
    f1=fopen("input.txt","r");
    f2=fopen("optab.txt","r");
-   f3=fopen("symtab.txt","w");
+   f3=fopen("symtab.txt","w+");
    f4=fopen("intermediatefile.txt","w");
 
    int start,length;
@@ -96,7 +97,10 @@ void main()
       if(strcmp(label,"*")!=0)
       {
          if(SearchSymbol(label,f3))
+         {
             symbol_error=1;
+            break;
+         }
          else
          {
             fprintf(f3,"%s	%X\n",label,locctr);
@@ -106,7 +110,7 @@ void main()
          op_error=1;
       if(strcmp(label,"*")==0)
       {
-         fprintf(f4,"%X		%s	%s\n",locctr,opcode,operand);
+         fprintf(f4,"%X			%s	%s\n",locctr,opcode,operand);
       }
       else
       {
